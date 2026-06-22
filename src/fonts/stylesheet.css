@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'Bad Script';
+    src: url('BadScript-Regular.woff2') format('woff2'),
+        url('BadScript-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('Kalam-Bold.woff2') format('woff2'),
+        url('Kalam-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('Kalam-Light.woff2') format('woff2'),
+        url('Kalam-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('Kalam-Regular.woff2') format('woff2'),
+        url('Kalam-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Margarine';
+    src: url('Margarine-Regular.woff2') format('woff2'),
+        url('Margarine-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nothing You Could Do';
+    src: url('NothingYouCouldDo.woff2') format('woff2'),
+        url('NothingYouCouldDo.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pangolin';
+    src: url('Pangolin-Regular.woff2') format('woff2'),
+        url('Pangolin-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Protest Revolution';
+    src: url('ProtestRevolution-Regular.woff2') format('woff2'),
+        url('ProtestRevolution-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

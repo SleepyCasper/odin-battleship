@@ -6,19 +6,16 @@ class Player {
     }
 }
 
-class Human extends Player {
-    constructor(name = "Captain") {
+export class Human extends Player {
+    constructor(name = "Admiral") {
         super()
         this.name = name
     }
 }
 
-class Computer extends Player {
+export class Computer extends Player {
     constructor() {
         super()
-        this.name = "Computer"
+        this.name = "Enemy"
     }
 }
-
-const human = new Human()
-const ai = new Computer()

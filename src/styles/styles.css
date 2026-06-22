@@ -1,5 +1,77 @@
 @import "./style-vars.css";
 
+@font-face {
+    font-family: 'Bad Script';
+    src: url('../fonts/BadScript-Regular.woff2') format('woff2'),
+        url('../fonts/BadScript-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('../fonts/Kalam-Bold.woff2') format('woff2'),
+        url('../fonts/Kalam-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('../fonts/Kalam-Light.woff2') format('woff2'),
+        url('../fonts/Kalam-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kalam';
+    src: url('../fonts/Kalam-Regular.woff2') format('woff2'),
+        url('../fonts/Kalam-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Margarine';
+    src: url('../fonts/Margarine-Regular.woff2') format('woff2'),
+        url('../fonts/Margarine-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nothing You Could Do';
+    src: url('../fonts/NothingYouCouldDo.woff2') format('woff2'),
+        url('../fonts/NothingYouCouldDo.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pangolin';
+    src: url('../fonts/Pangolin-Regular.woff2') format('woff2'),
+        url('../fonts/Pangolin-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Protest Revolution';
+    src: url('../fonts/ProtestRevolution-Regular.woff2') format('woff2'),
+        url('../fonts/ProtestRevolution-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 *,
 ::before,
 ::after {
@@ -94,4 +166,305 @@ summary {
 /*////////////////////////////////////////////////////////*/
 * {
     /* outline: 1px solid red; */
+    color: var(--text-primary);
+}
+
+html {
+    font-family: var(--font);
+}
+
+button {
+    transition:all .5s ease;
+    outline:none;
+    box-shadow: 10px 10px 34px -5px hsla(0,0%,0%,.2);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: solid 2px var(--text-primary);
+}
+
+button:hover{
+   box-shadow:2px 8px 4px -6px hsla(0,0%,0%,.3);
+}
+
+input {
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: solid 2px var(--text-primary);
+}
+
+h1 {
+    font-family: 'Protest Revolution';
+    font-size: 3rem;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--bg-primary);
+}
+
+header {
+    position: relative;
+    padding: 2.5rem 0;
+    text-align: center;
+    
+
+    h1 {
+        margin-top: 1rem;
+    }
+}
+
+header::before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(../img/border_header.svg);
+    width: 100%;
+    height: 6rem;
+    background-position: 0 -1rem;
+    background-repeat: repeat-x;
+
+    
+    z-index: -1;
+}
+
+main {
+    height: 100%;
+}
+
+.new-game {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 20rem;
+    align-items: center;
+
+
+    input {
+        padding: 0.4rem 0.6rem;
+    }
+
+    button {
+        background-color: white;
+        font-weight: bold;
+        padding: 0.6rem;
+    }
+}
+
+
+
+.game-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5rem;
+    padding: 0 2rem;
+}
+
+.status-bar {
+    font-size: 1.5rem;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0.8rem 1.5rem;
+    max-width: 70ch;
+    min-width: 20ch;
+}
+
+.container-field {
+    --field: 20rem;
+    --axis: 2rem;
+
+    display: grid;
+    height: calc(var(--field) + var(--axis));
+    width: calc(var(--field) + var(--axis));
+    grid-template-columns: var(--axis) var(--field);
+    grid-template-rows: var(--axis) var(--field);
+}
+
+.field {
+    position: relative;
+    display: grid;
+    grid-column: 2 / 3;
+
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+
+    
+    .cell {
+        position: relative;
+        --hover-length: calc(2rem *5)
+        /* border: 1px solid red; */
+        z-index: 0;
+    }
+
+    .cell:hover {
+        background-color: var(--bg-primary-hover);
+    }
+
+    .cell.preview-valid {
+        background-color: var(--bg-green-hover);
+    }
+
+    .cell.preview-invalid {
+        background-color: var(--bg-red-hover);
+    }
+}
+
+.field:not(.hidden)::before {
+    position: absolute;
+    content: "";
+    top: -0.1rem;
+    left: -0.1rem;
+    height: 101%;
+    width: 101%;
+    pointer-events: none;
+
+    background-image: url(../img/board.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    z-index: 1;
+}
+
+.axis-x {
+    grid-column: 2 / 3;
+    display: flex;
+    justify-content: center;
+}
+
+.axis-y {
+    display: flex;
+    flex-direction: column;
+}
+
+.char, 
+.num {
+    size: 2rem;
+    aspect-ratio: 1 / 1;
+    align-content: center;
+    text-align: center;
+}
+
+.place-ships {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-width: 22rem;
+    padding: 2rem 0;
+
+    button {
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+.place-ships.hidden {
+    display: none;
+}
+
+.ships {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 0.8rem;
+}
+
+.ship {
+    position: relative;
+    height: 3rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 90%;
+    padding: 0.5rem;
+    
+    img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.ship:hover::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 4px solid var(--text-primary);
+    filter: url('#squiggly-1');
+
+    z-index: 3;
+    pointer-events: none;
+}
+
+.ship.choose {
+    position: relative;
+    background-image: linear-gradient(to right, hsl(210, 13%, 94%), hsl(210, 13%, 94%) /* var(--bg-primary-hover), var(--bg-primary-hover) */);
+    background-repeat: no-repeat;
+    background-size: 98% 96%;
+    background-position: 0.2rem 0.2rem;
+}
+
+
+
+@keyframes squiggly-anim {
+    0% {
+        filter: url('#squiggly-0')
+    }
+
+    25% {
+        filter: url('#squiggly-1')
+    }
+
+    50% {
+        filter: url('#squiggly-2')
+    }
+
+    75% {
+        filter: url('#squiggly-3')
+    }
+
+    100% {
+        filter: url('#squiggly-4')
+    }
+}
+
+
+.ship.choose .border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 4px solid var(--text-primary);
+    will-change: filter;
+    
+
+    animation: squiggly-anim 0.5s linear infinite;
+    pointer-events: none;
+}
+
+#destroyer {
+    width: calc(2rem * 3);    
+}
+
+#submarine {
+    width: calc(2rem * 3);
+}
+
+#carrier {
+    width: calc(2rem * 5);
+}
+
+#battleship {
+    width: calc(2rem * 4);
+}
+
+#boat {
+    width: calc(2rem * 2);
+}
+
+.hidden {
+    display: none;
 }

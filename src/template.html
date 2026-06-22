@@ -6,6 +6,75 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <header>
+        <h1 class="title">Battleship</h1>
+    </header>
+    <main>
+        <div class="new-game" id="div-new-game">
+            <h2>Enter your name</h2>
+            <input type="text" name="player-name" id="input-player-name" placeholder="Admiral">
+            <button type="button" class="btn" id="btn-new-game">New game</button>
+        </div>
+
+        <div class="status-bar hidden" id="status-bar">
+            <p>Waiting for your orders, <span class="player-name">Admiral</span>!</p>
+        </div>
+
+        <div class="game-area hidden" id="game-area">
+
+            <div class="container-field player">
+            </div>
+            <div class="place-ships" id="place-ships">
+                <p>Place your ships on the field. You can change axis by hitting the button or pressing "R"</p>
+                <button type="button" class="rotate" id="btn-rotate">Axis: <span id="axis">x</span></button>
+                <div class="ships" id="ships">
+
+                    <div class="ship choose" id="carrier" data-length = "5">
+                        <img src="./img/ship-carrier.png" alt="Carrier">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="border">
+                          <defs>
+                            <filter id="squiggly-0">
+                              <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+                              <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                            <filter id="squiggly-1">
+                              <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+                            </filter>
+
+                            <filter id="squiggly-2">
+                              <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                            <filter id="squiggly-3">
+                              <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+                            </filter>
+
+                            <filter id="squiggly-4">
+                              <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                          </defs> 
+                        </svg>
+                    </div>
+                    <div class="ship" id="battleship" data-length="4">
+                        <img src="./img/ship-battleship.png" alt="Battleship">
+                    </div>
+                    <div class="ship" id="destroyer" data-length="3">
+                        <img src="./img/ship-destroyer.png" alt="Destroyer">
+                    </div>
+                    <div class="ship" id="submarine" data-length="3">
+                        <img src="./img/ship-submarine.png" alt="Submarine">
+                    </div>
+                    <div class="ship" id="boat" data-length="2">
+                        <img src="./img/ship-boat.png" alt="Boat">
+                    </div>
+                </div>
+                <button class="btn-start" id="btn-start">Start battle</button>
+            </div>
+            <div class="container-field enemy hidden"></div>
+        </div>
+    </main>
 </body>
 </html>
