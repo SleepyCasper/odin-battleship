@@ -121,11 +121,96 @@ export const Render =(function() {
       lastHoveredCells = []
     }
 
+    function disablePreview() {
+      document.querySelectorAll(".field.player .cell").forEach(cell => {
+        cell.classList.add("disabled")
+      })
+    }
+
+    function enableBtnStart() {
+      Elements.buttons.btnStartBattle.classList.remove("disabled")
+    }
+
+    function renderIMGShip(row, col, length, axis, id) {
+      const div = document.createElement("div")
+      div.classList.add("wrapper-ship")
+      div.id = id
+
+      const img = document.createElement("img")
+      img.src = `./img/ship-${id}.png`
+      img.alt = id
+
+      if (axis === "y") {
+        div.style.cssText = `
+        grid-column-start: ${col + 1};
+        grid-column-end: ${col + 2};
+        grid-row-start: ${row + 1};
+        grid-row-end: ${row + length + 1};
+        max-width: 2rem;
+        height: var(--${id}-width);
+        `
+
+        img.style.cssText = `
+        width: calc(var(--${id}-width) * 0.9);
+        transform: rotate(90deg);
+        `
+      } else {
+          div.style.cssText = `
+          grid-column-start: ${col + 1};
+          grid-column-end: ${col + length + 1};
+          grid-row-start: ${row + 1};
+          grid-row-end: ${row + 2};
+          width: var(--${id}-width);
+          height: 2rem;
+          `
+        img.style.cssText = `width: calc(var(--${id}-width) * 0.9);`
+      }
+
+      // Placement in grid
+      div.append(img)
+      const playerField = document.querySelector(".player.field")
+      playerField.appendChild(div)
+    }
+
+    function updateStatusBar(status, plName) {
+      let text = ""
+      
+      switch(status) {
+        case "start":
+          text = "All ships are set, ready to start the battle."
+          break;
+        case "waiting":
+          text = `Waiting for your orders, ${plName}!`
+          break;
+        case "invalid": 
+          text = "This placement is invalid!"
+          break;
+        case "hitEnemy": 
+          text = "The enemy hits your ship!"
+          break;
+        case "sinkEnemy":
+          text = "The enemy sinks your ship!"
+          break;
+        case "hitPlayer":
+          text = "You hit the enemy's ship!"
+          break;
+        case "sinkPlayer":
+          text = "You sink the enemy's ship!"
+          break;
+      }
+
+      Elements.statusBar.textContent = text
+    }
+
     return {
         renderSVGborder,
         renderAxis,
         renderField,
         hoverPreview,
         clearPreview,
+        disablePreview,
+        enableBtnStart,
+        renderIMGShip,
+        updateStatusBar,
     }
 })();

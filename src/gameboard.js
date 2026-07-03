@@ -30,30 +30,30 @@ export class Gameboard {
 
         switch (direction) {
             case "x":
-                current = col - 1
+                current = col
                 while (count !== length) {
                     if (current > 9) {
                         throw new Error("Coordinates are out of bond")
                     }
 
-                    if (this.board[row - 1][current] !== null) {
+                    if (this.board[row][current] !== null) {
                         throw new Error ("This cell is already occupied")
                     }
-                    this.board[row - 1][current] = { ship: newShip, isHit: false }
+                    this.board[row][current] = { ship: newShip, isHit: false }
                     current += 1
                     count++
                 } break;
             case "y":
-                current = row - 1
+                current = row
                 while (count !== length) {
                     if (current > 9) {
                         throw new Error("Coordinates are out of bond")
                     }
 
-                    if (this.board[current][col - 1] !== null) {
+                    if (this.board[current][col] !== null) {
                         throw new Error ("This cell is already occupied")
                     }
-                    this.board[current][col - 1] = { ship: newShip, isHit: false }
+                    this.board[current][col] = { ship: newShip, isHit: false }
                     current += 1
                     count++
                 }
@@ -63,10 +63,10 @@ export class Gameboard {
     }
 
     receiveAttack(row, col) {
-        let cell = this.board[row - 1][col - 1]
+        let cell = this.board[row][col]
         if (cell === null) {
-            this.missedHits.push([row - 1, col - 1])
-            this.board[row - 1][col - 1] = 'miss'
+            this.missedHits.push([row, col])
+            this.board[row][col] = 'miss'
         } else if (typeof cell === "string" || cell.isHit === true) {
             throw new Error("This cell is already hit")
         } else {
