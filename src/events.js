@@ -1,6 +1,6 @@
-import { Elements } from "./elements"
-import { Render } from "./render";
-import { Game } from "./game.";
+import { Elements } from "./elements.js"
+import { Render } from "./render.js";
+import { Game } from "./game.js";
 
 export const Events = () => {
     let vars = {
@@ -33,6 +33,7 @@ export const Events = () => {
     const handler = {
         set(target, prop, value) {
             target[prop] = value
+            console.log(target)
             if (prop === "status") {
                 Render.updateStatusBar(vars.status, vars.playerName)
             }
@@ -40,7 +41,7 @@ export const Events = () => {
         }
     }
 
-    const state = new Proxy(vars, handler)
+    vars = new Proxy(vars, handler)
     
 
     // Select ship to place
@@ -163,7 +164,7 @@ export const Events = () => {
             const col = Number(cell.dataset.col)
             
             if (isValid(row, col)) {
-                state.status = "waiting"
+                vars.status = "waiting"
                 //Set a ship to player's board
                 Game.player.board.placeShip(row, col, vars.activeShipLength, vars.placeDir)
                 console.log("A ship is placed at: (" + row + " , " + col + "). Current board: " + Game.player.board.getBoard())
@@ -181,14 +182,14 @@ export const Events = () => {
                 //Delete the ship img from placement window
                 deleteChosenShip(vars.activeShipName)
             } else { 
-                state.status = "invalid"
+                vars.status = "invalid"
             }
         }
 
         if (vars.allPlaced) {
             Render.disablePreview()
             Render.enableBtnStart()
-            state.status = "start"
+            vars.status = "start"
         }
     })
 
@@ -216,10 +217,14 @@ export const Events = () => {
     // Start the battle
     Elements.buttons.btnStartBattle.addEventListener("click", () => {
         Elements.gameArea.divPlaceShips.classList.add("hidden")
-        state.status = "waiting"
-        //generate enemy field:
+        vars.status = "waiting"
+
+        // generate enemy field UI:
         Elements.gameArea.divPlaceShips.classList.add("hidden")
         Render.renderField("enemy")
         Elements.gameArea.enemyContField.classList.remove("hidden")
+
+        // generate placement of enemy's ships
+
     })
 }

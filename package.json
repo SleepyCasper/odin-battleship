@@ -2,10 +2,11 @@
   "name": "repository-template",
   "version": "1.0.0",
   "main": "webpack.config.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --config webpack.dev.cjs",
+    "build": "webpack --config webpack.prod.cjs",
     "lint": "eslint ."
   },
   "repository": {

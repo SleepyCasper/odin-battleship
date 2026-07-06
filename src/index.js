@@ -1,4 +1,4 @@
 import "./styles/styles.css";
-import { Events } from "./events";
+import { Events } from "./events.js";
 
 Events();
