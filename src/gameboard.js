@@ -23,56 +23,62 @@ export class Gameboard {
     }
 
     placeShip(row, col, length, direction) {
-        const newShip = new Ship(length)
+       const newShip = new Ship(length)
+       let valids = []
 
-        let count = 0;
-        let current
+       switch (direction) {
+           case "x":
+               for (let current = col; valids.length < length; current++) {
+                   if (current > 9) {
+                       throw new Error("Coordinates are out of bond")
+                   }
+                   if (this.board[row][current] !== null) {
+                       throw new Error("This cell is already occupied")
+                   }
+                   valids.push([row, current])
+               }
+               break;
 
-        switch (direction) {
-            case "x":
-                current = col
-                while (count !== length) {
-                    if (current > 9) {
-                        throw new Error("Coordinates are out of bond")
-                    }
+           case "y":
+               for (let current = row; valids.length < length; current++) {
+                   if (current > 9) {
+                       throw new Error("Coordinates are out of bond")
+                   }
+                   if (this.board[current][col] !== null) {
+                       throw new Error("This cell is already occupied")
+                   }
+                   valids.push([current, col])
+               }
+               break;
+       }
 
-                    if (this.board[row][current] !== null) {
-                        throw new Error ("This cell is already occupied")
-                    }
-                    this.board[row][current] = { ship: newShip, isHit: false }
-                    current += 1
-                    count++
-                } break;
-            case "y":
-                current = row
-                while (count !== length) {
-                    if (current > 9) {
-                        throw new Error("Coordinates are out of bond")
-                    }
+       valids.forEach(coord => {
+           this.board[coord[0]][coord[1]] = { ship: newShip, isHit: false }
+       })
 
-                    if (this.board[current][col] !== null) {
-                        throw new Error ("This cell is already occupied")
-                    }
-                    this.board[current][col] = { ship: newShip, isHit: false }
-                    current += 1
-                    count++
-                }
-        }
-
-        this.ships.push(newShip)
+       this.ships.push(newShip)
     }
 
     receiveAttack(row, col) {
+        console.log(`Attacking (${row}, ${col})!`)
         let cell = this.board[row][col]
         if (cell === null) {
             this.missedHits.push([row, col])
             this.board[row][col] = 'miss'
+            return 'miss'
         } else if (typeof cell === "string" || cell.isHit === true) {
             throw new Error("This cell is already hit")
         } else {
             let ship = cell.ship
+            
             ship.hit()
             cell.isHit = true
+
+            let isSunk = ship.isSunk()
+
+            if (isSunk == true) {
+                return 'sunk'
+            } else return 'hit'
         }
         
     }
@@ -83,5 +89,9 @@ export class Gameboard {
 
     getBoard() {
         return this.board
+    }
+
+    getCell(row, col) {
+        return this.board[row][col]
     }
 }
