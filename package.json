@@ -1,43 +1,44 @@
 {
-  "name": "repository-template",
-  "version": "1.0.0",
-  "main": "webpack.config.js",
-  "type": "module",
-  "scripts": {
-    "test": "jest",
-    "start": "webpack serve --config webpack.dev.cjs",
-    "build": "webpack --config webpack.prod.cjs",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SleepyCasper/Repository-template.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SleepyCasper/Repository-template/issues"
-  },
-  "homepage": "https://github.com/SleepyCasper/Repository-template#readme",
-  "description": "",
-  "devDependencies": {
-    "@babel/preset-env": "^7.29.3",
-    "@eslint/js": "^10.0.1",
-    "css-loader": "^7.1.3",
-    "eslint": "^10.1.0",
-    "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.4.0",
-    "html-loader": "^5.1.0",
-    "html-webpack-plugin": "^5.6.6",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.3.0",
-    "mini-css-extract-plugin": "^2.10.0",
-    "prettier": "3.8.1",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.0.0",
-    "webpack-merge": "^6.0.1"
-  }
+	"name": "repository-template",
+	"version": "1.0.0",
+	"main": "webpack.config.js",
+	"type": "module",
+	"scripts": {
+		"test": "jest",
+		"start": "webpack serve --config webpack.dev.cjs",
+		"build": "webpack --config webpack.prod.cjs",
+		"lint": "eslint .",
+		"format": "prettier --write ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SleepyCasper/Repository-template.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/SleepyCasper/Repository-template/issues"
+	},
+	"homepage": "https://github.com/SleepyCasper/Repository-template#readme",
+	"description": "",
+	"devDependencies": {
+		"@babel/preset-env": "^7.29.3",
+		"@eslint/js": "^10.0.1",
+		"css-loader": "^7.1.3",
+		"eslint": "^10.1.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.4.0",
+		"html-loader": "^5.1.0",
+		"html-webpack-plugin": "^5.6.6",
+		"identity-obj-proxy": "^3.0.0",
+		"jest": "^30.3.0",
+		"mini-css-extract-plugin": "^2.10.0",
+		"prettier": "3.8.1",
+		"style-loader": "^4.0.0",
+		"webpack": "^5.104.1",
+		"webpack-cli": "^6.0.1",
+		"webpack-dev-server": "^5.0.0",
+		"webpack-merge": "^6.0.1"
+	}
 }
