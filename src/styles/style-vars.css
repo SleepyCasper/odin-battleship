@@ -1,10 +1,12 @@
 :root {
     --font: 'Kalam', system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --text-primary: #232376;
+    --text-primary: hsl(240, 54%, 30%);
     --bg-primary: hsl(210, 13%, 89%);
     
     --bg-white-hover:hsl(240, 100%, 96%);
     --bg-primary-hover: hsl(210, 13%, 75%);
     --bg-green-hover: hsl(141, 20%, 75%);
-    --bg-red-hover: hsl(0, 20%, 75%);
+    --bg-red-hover: hsl(0, 30%, 75%);
+
+    --red: #952525;
 }

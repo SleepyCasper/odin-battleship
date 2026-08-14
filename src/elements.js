@@ -12,9 +12,9 @@ export const Elements = {
     gameArea: {
         div: document.getElementById("game-area"),
         divPlaceShips: document.getElementById("place-ships"),
-        ships: document.querySelectorAll("#ships .ship"),
         playerContField: document.querySelector(".container-field.player"),
-        enemyContField: document.querySelector(".container-field.enemy"),
+        enemyContField: document.querySelector(".container-field.computer"),
     },
-    statusBar: document.getElementById("status-bar")
+    statusBar: document.getElementById("status-bar"),
+    btnRestart: document.getElementById("btn-restart")
 }

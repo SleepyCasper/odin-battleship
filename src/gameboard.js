@@ -8,22 +8,13 @@ export class Gameboard {
     }
 
     createBoard() {
-        /* let board = [] */
-
-        // Using loop:
-        /* for(let i = 0; i < 10; i++) {
-            const arr = new Array(10).fill(null)
-            board.push(arr);
-        } */
-
-        // Using from():
         let board = Array.from({ length: 10 }, () => new Array(10).fill(null))
 
         return board
     }
 
-    placeShip(row, col, length, direction) {
-       const newShip = new Ship(length)
+    placeShip(row, col, length, direction, id) {
+       const newShip = new Ship(row, col, length, direction, id)
        let valids = []
 
        switch (direction) {
@@ -60,7 +51,6 @@ export class Gameboard {
     }
 
     receiveAttack(row, col) {
-        console.log(`Attacking (${row}, ${col})!`)
         let cell = this.board[row][col]
         if (cell === null) {
             this.missedHits.push([row, col])
@@ -77,6 +67,10 @@ export class Gameboard {
             let isSunk = ship.isSunk()
 
             if (isSunk == true) {
+                const allSunk = this.isAllSunk()
+                if (allSunk === true) {
+                    return 'allSunk'
+                }
                 return 'sunk'
             } else return 'hit'
         }
@@ -93,5 +87,42 @@ export class Gameboard {
 
     getCell(row, col) {
         return this.board[row][col]
+    }
+
+    getAllShipCells(row, col) {
+        const cell = this.getCell(row, col)
+        const ship = cell.ship
+        /* let allCells = this.board.filter(cell => cell.ship === ship) */
+
+        return allCells
+    }
+
+    getShips() {
+        return this.ships
+    }
+
+    getFirstShipCell(row, col) {
+        const cell = this.getCell(row, col)
+        const ship = cell.ship
+        let firstCell
+
+        if (ship.axis === 'x') {
+            for (let c = 0; c < 9; c++) {
+                if (this.board[row][c] !== null) {
+                    if (this.board[row][c].ship === ship) {
+                        return firstCell = [+row, c]
+                    }
+                }
+                
+            }
+        } else if (ship.axis === 'y') {
+            for (let r = 0; r < 9; r++) {
+                if (this.board[r][col] !== null) {
+                    if (this.board[r][col].ship === ship) {
+                        return firstCell = [r, +col]
+                    }
+                }
+            }
+        }
     }
 }

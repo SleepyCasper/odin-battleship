@@ -17,8 +17,8 @@ export class Computer extends Player {
     constructor() {
         super()
         this.name = "Enemy"
-        this.targetQueue = []      // array of { row, col, ship }
-        this.activeHunts = new Map() // ship -> { hits: [[row,col], ...], axis: 'x'|'y'|null }
+        this.targetQueue = []
+        this.activeHunts = new Map() 
     }
 
     placeShips() {
@@ -30,7 +30,7 @@ export class Computer extends Player {
             boat: 2
         }
 
-        const recursion = (length) => {
+        const recursion = (length, id) => {
             const row = Math.floor(Math.random() * 10)
             const col = Math.floor(Math.random() * 10)
 
@@ -39,20 +39,21 @@ export class Computer extends Player {
             const dir = axis[index]
 
             try {
-                this.board.placeShip(row, col, length, dir)
+                this.board.placeShip(row, col, length, dir, id)
             } catch (error) {
                 if (error) {
-                    recursion(length)
+                    recursion(length, id)
                 }
             }
         }
 
         Object.entries(ships).forEach(([key, value]) => {
-            recursion(value)
+            recursion(value, key)
         });
     }
 
     attackHumanWaters(humanBoard) {
+        let target
         // Step 2. Randomly hit when there's no target
         const randomHit = (humanBoard) => {
             const row = Math.floor(Math.random() * 10)
@@ -69,19 +70,17 @@ export class Computer extends Player {
         const handleHit = (humanBoard, row, col) => {
             try {
                 const state = humanBoard.receiveAttack(row, col)
-                console.log(state)
+                target = {
+                    state: state,
+                    row: row,
+                    col: col
+                }
 
-                // The cell we just attacked, if it came from the queue, is always
-                // at the front (targetedHit only ever attacks targetQueue[0],
-                // and randomHit only fires when the queue is empty).
                 if (this.targetQueue.length !== 0) {
                     this.targetQueue.shift()
                 }
                 
                 if (state === 'hit' || state === 'sunk') {
-                    console.log("Getting neighbors")
-                    // Identify which physical ship this cell belongs to.
-                    // This is legitimate - we've already legally attacked this cell.
                     const ship = humanBoard.getCell(row, col).ship
 
                     let hunt = this.activeHunts.get(ship)
@@ -92,8 +91,6 @@ export class Computer extends Player {
                     hunt.hits.push([row, col])
 
                     if (state === 'sunk') {
-                        // Only clear THIS ship's hunt and its queued candidates.
-                        // Any other ship's in-progress hunt is untouched.
                         this.activeHunts.delete(ship)
                         this.targetQueue = this.targetQueue.filter(t => t.ship !== ship)
                     } else {
@@ -111,20 +108,20 @@ export class Computer extends Player {
                                 this.targetQueue = this.targetQueue.filter(t => t.ship !== ship || t.col === c1)
                             }
 
-                            this._queueNeighbors(r1, c1, hunt.axis, ship)
-                            this._queueNeighbors(r2, c2, hunt.axis, ship)
+                            this._queueNeighbors(r1, c1, hunt.axis, ship, humanBoard)
+                            this._queueNeighbors(r2, c2, hunt.axis, ship, humanBoard)
+                            
                         } else {
-                            this._queueNeighbors(row, col, null, ship)
+                            this._queueNeighbors(row, col, null, ship, humanBoard)
                         }
                     }
-                    console.log("Updated queue:", this.targetQueue)
                 }
             } catch (error) {
                 if (error) {
                     if (error.message === "This cell is already hit" && this.targetQueue.length !== 0) {
                         this.targetQueue.shift()
                     }
-                    this.attackHumanWaters(humanBoard)
+                    return target = this.attackHumanWaters(humanBoard)
                 }
             }
         }
@@ -134,17 +131,17 @@ export class Computer extends Player {
             // keep hunting target by hitting nearby cells
             targetedHit(humanBoard, this.targetQueue[0])
         } else randomHit(humanBoard)
+
+        return target
     }
 
     // Step 3.2 Find next to hit cells
-    // Computes valid neighbor coordinates and pushes them into targetQueue,
-    // tagged with which ship they belong to.
-    _queueNeighbors(row, col, axis, ship) {
-        const neighbors = this._getNeighbors(row, col, axis)
+    _queueNeighbors(row, col, axis, ship, humanBoard) {
+        const neighbors = this._getNeighbors(row, col, axis, humanBoard)
         this.targetQueue.push(...neighbors.map(([r, c]) => ({ row: r, col: c, ship })))
     }
 
-    _getNeighbors(row, col, axis) {
+    _getNeighbors(row, col, axis, humanBoard) {
         let neighbors = []
 
         if (axis === null) {
@@ -169,8 +166,7 @@ export class Computer extends Player {
         filtered.forEach(coord => {
             const row = coord[0]
             const col = coord[1]
-            const cell = this.board.getCell(row, col)
-            console.log("Looking neighbors for cell:", cell)
+            const cell = humanBoard.getCell(row, col)
             
             if (cell !== null) {
                 if (cell.isHit === false) {
@@ -183,13 +179,30 @@ export class Computer extends Player {
             }
         })
 
-        console.log("Filtered list of cells:", available)
         return available
+    }
+
+    restoreState(serializedState, humanBoard) {
+        const findShip = (id) => humanBoard.getShips().find(ship => ship.id === id)
+
+        this.targetQueue = serializedState.targetQueue.map(({ row, col, shipId }) => ({
+            row,
+            col,
+            ship: shipId ? findShip(shipId) : null
+        }))
+
+        this.activeHunts = new Map()
+        serializedState.activeHunts.forEach(({ shipId, hits, axis }) => {
+            const ship = findShip(shipId)
+            if (ship) {
+                this.activeHunts.set(ship, { hits, axis })
+            }
+        })
     }
 }
 
 
-function printBoard(board) {
+export function printBoard(board) {
   const header = "   " + Array.from({ length: 10 }, (_, i) => i).join("  ")
   console.log(header)
 
@@ -206,23 +219,3 @@ function cellToSymbol(cell) {
   if (cell.isHit) return "X"             // ship, hit
   return "S"                              // ship, not hit
 }
-
-const computer1 = new Computer()
-const computer2 = new Computer()
-
-computer1.placeShips()
-
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-computer2.attackHumanWaters(computer1.board)
-
-
-printBoard(computer1.board.getBoard())

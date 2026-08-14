@@ -228,8 +228,30 @@ header::before {
 }
 
 main {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 5rem 5rem 5rem;
 }
+
+@keyframes reveal-arm1 {
+  from { -webkit-clip-path: circle(0% at 0% 0%);   clip-path: circle(0% at 0% 0%); }
+  to   { -webkit-clip-path: circle(150% at 0% 0%); clip-path: circle(150% at 0% 0%); }
+}
+
+@keyframes reveal-arm2 {
+  from { -webkit-clip-path: circle(0% at 100% 0%);   clip-path: circle(0% at 100% 0%); }
+  to   { -webkit-clip-path: circle(150% at 100% 0%); clip-path: circle(150% at 100% 0%); }
+}
+
+@keyframes draw-in {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes blink-sync {
+  50% { --blink-color: transparent; }
+}
+
+
 
 .new-game {
     display: flex;
@@ -266,7 +288,10 @@ main {
     align-items: center;
     flex-wrap: wrap;
     gap: 5rem;
-    padding: 2rem;
+    padding: 2rem 0;
+
+    animation: blink-sync 2s steps(2, jump-none) infinite;
+    --blink-color: var(--bg-red-hover);
 }
 
 .status-bar {
@@ -281,28 +306,37 @@ main {
 .container-field {
     --field: 20rem;
     --axis: 2rem;
+    --waters-height: 2rem;
+    --waters-width: 10rem;
 
     display: grid;
-    height: calc(var(--field) + var(--axis));
-    width: calc(var(--field) + var(--axis));
+    height: calc(var(--field) + var(--axis)) + var(--waters-height);
+    width: calc(var(--field) + var(--axis)) + var(--waters-width);
     grid-template-columns: var(--axis) var(--field);
-    grid-template-rows: var(--axis) var(--field);
+    grid-template-rows: var(--waters-height) var(--axis) var(--field);
+}
+
+.waters {
+    height: var(--waters-height);
+    width: var(--waters-width);
+    grid-column: 2 / 3;
+    padding: 0.4rem;
+    font-size: 1.1rem;
 }
 
 .field {
     position: relative;
     display: grid;
     grid-column: 2 / 3;
+    grid-row: 3 / 4;
 
     grid-template-columns: repeat(10, 2rem);
     grid-template-rows: repeat(10, 2rem);
-
     
     .cell {
         position: relative;
-        --hover-length: calc(2rem *5)
-        /* border: 1px solid red; */
-        z-index: 0;
+        --hover-length: calc(2rem *5);
+        transition: background-color 1s ease;
     }
 
     .cell:hover {
@@ -317,14 +351,6 @@ main {
         background-color: var(--bg-red-hover);
     }
 
-    .cell.occupied {
-        background-color: var(--bg-primary-hover);
-    }
-
-    .cell.disabled {
-        pointer-events: none;
-    }
-
     .wrapper-ship {
         position: absolute;
         display: flex;
@@ -332,14 +358,68 @@ main {
         align-items: center;
         height: 2rem;
         padding: 0.2rem;
-        /* pointer-events: none; */
-        z-index: 10;
+        z-index: 4;
 
         img {
             flex-shrink: 0;
-            height: 1.6rem
+            height: 1.6rem;
         }
     }
+
+    .cell .arm {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 75%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+    }
+
+    .arm-1 {
+      -webkit-clip-path: circle(0% at 0% 0%);
+      clip-path: circle(0% at 0% 0%);
+    }
+
+    .arm-2 {
+      -webkit-clip-path: circle(0% at 100% 0%);
+      clip-path: circle(0% at 100% 0%);
+    }
+
+    .cross.playing .arm-1 {
+      animation: reveal-arm1 0.35s ease-out forwards;
+    }
+
+    .cross.playing .arm-2 {
+      animation: reveal-arm2 0.35s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+
+    .cell .circle {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        width: 75%;
+        transform: translate(-50%, -50%);
+    }
+
+    .cell .circle svg {
+        height: 100%;
+        width: 100%;
+    }
+
+    .cell.hit {
+        background-color: var(--blink-color);
+        pointer-events: none;
+    }
+
+    .cell.sunk {
+        background-color: var(--bg-red-hover);
+        pointer-events: none;
+    }
+}
+
+.field.disabled {
+    pointer-events: none;
 }
 
 .field:not(.hidden)::before {
@@ -360,11 +440,14 @@ main {
 
 .axis-x {
     grid-column: 2 / 3;
+    grid-row: 2 / 3;
     display: flex;
     justify-content: center;
 }
 
 .axis-y {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
     display: flex;
     flex-direction: column;
 }
@@ -435,13 +518,41 @@ main {
 
 .ship.choose {
     position: relative;
-    background-image: linear-gradient(to right, hsl(210, 13%, 94%), hsl(210, 13%, 94%) /* var(--bg-primary-hover), var(--bg-primary-hover) */);
+    background-image: linear-gradient(to right, hsl(210, 13%, 94%), hsl(210, 13%, 94%));
     background-repeat: no-repeat;
     background-size: 98% 96%;
     background-position: 0.2rem 0.2rem;
 }
 
+.field.computer .wrapper-ship {
+    opacity: 0;
+    filter: brightness(0) saturate(100%) invert(18%) sepia(26%) saturate(4677%) hue-rotate(336deg) brightness(106%) contrast(96%);
+    transition: opacity 1s ease-in-out;
+}
 
+.field.computer .wrapper-ship.appeared {
+    opacity: 1;
+}
+
+.field.player .wrapper-ship img:first-child {
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+.field.player .wrapper-ship img.disappeared {
+    opacity: 0
+}
+
+.field.player .wrapper-ship img.rerender {
+    position: absolute;
+    opacity: 0;
+    filter: brightness(0) saturate(100%) invert(18%) sepia(26%) saturate(4677%) hue-rotate(336deg) brightness(106%) contrast(96%);
+    transition: opacity 1s ease-in-out;
+}
+
+.field.player .wrapper-ship img.rerender.appeared {
+    opacity: 1;
+}
 
 @keyframes squiggly-anim {
     0% {
@@ -501,5 +612,46 @@ main {
 }
 
 .hidden {
+    display: none;
+}
+
+.btn-restart {
+    padding: 0.5rem 0.7rem;
+    width: 5rem;
+    align-self: center;
+}
+
+.win-notif {
+    position: absolute;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    top: 30%;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 25rem;
+    height: 10rem;
+    padding: 1.5rem;
+    background-color: var(--bg-primary);
+    border: none;
+    border-radius: 0.5rem;
+
+    .btn-again {
+        width: 10rem;
+    }
+
+    p {
+        text-align: center;
+    }
+}
+
+.win-notif::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.win-notif:not([open]) {
     display: none;
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="20.877176mm"
+   height="20.597986mm"
+   viewBox="-2 -2 20.877176 20.597986"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="hand-drawn" x="-40%" y="-40%" width="180%" height="180%">
+      <!-- copy A: the visible top stroke, wobbled -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="3" result="noiseA" />
+      <feDisplacementMap in="SourceGraphic" in2="noiseA" scale="3.5" result="wobbledA" />
+
+      <!-- copy B: wobbled differently, then dilated thicker -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="2" seed="11" result="noiseB" />
+      <feDisplacementMap in="SourceGraphic" in2="noiseB" scale="3.5" result="wobbledB" />
+      <!-- INCREASED FROM 0.3 TO 0.6 TO THICKEN THE BOTTOM STROKE -->
+      <feMorphology in="wobbledB" operator="dilate" radius="0.4" result="thickB" />
+
+      <!-- stack: thick/wobbled-B underneath, normal/wobbled-A on top -->
+      <feMerge>
+        <feMergeNode in="thickB" />
+        <feMergeNode in="wobbledA" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="translate(-1.0979011,-1.5995736)">
+    <path
+       class="hand-drawn"
+       pathLength="1"
+       style="fill:none;stroke:#232376;stroke-width:1.0;stroke-linecap:round;stroke-linejoin:round;"
+       d="m 30.418213,12.302098 c 0.747442,2.074324 0.633353,4.879862 -0.933183,6.484392 -1.67201,1.712564 -3.767194,2.715792 -5.539265,2.917389 -3.544144,0.403193 -7.348018,-2.537291 -7.65345,-6.697257 -0.305433,-4.159965 1.881521,-8.9399099 6.241256,-9.3536944 2.253436,-0.2138746 4.92541,0.6919048 6.800971,2.1537203 2.085218,1.6252227 3.017621,6.0832001 2.713317,8.8168751"
+       transform="rotate(-90,14.969148,19.113834)" />
+  </g>
+</svg>
+

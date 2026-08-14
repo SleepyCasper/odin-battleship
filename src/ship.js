@@ -1,8 +1,12 @@
 export class Ship {
-    constructor(length) {
+    constructor(row, col, length, direction, id) {
+        this.row = row;
+        this.col = col;
         this.length = length;
+        this.axis = direction;
+        this.id = id;
         this.hits = 0;
-        this.sunk = false
+        this.sunk = false;
     }
 
     hit() {
