@@ -204,8 +204,9 @@ h1 {
 }
 
 body {
-	position: relative;
-	height: fit-content;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 	background-color: var(--bg-primary);
 }
 
@@ -236,6 +237,7 @@ header::before {
 
 main {
 	display: flex;
+	flex: 1;
 	flex-direction: column;
 	padding: 0 5rem 5rem 5rem;
 }
@@ -679,8 +681,6 @@ main {
 }
 
 footer {
-	position: absolute;
-	bottom: 0;
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
